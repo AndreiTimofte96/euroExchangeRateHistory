@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euro - Lei Exchange Rate </title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+      margin: 0;
+    }
+
+    .myChartWrapper {
+      position: relative;
+      width: 4000px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="myChartWrapper">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <div class="chartWrapper">
+    <div class="chartAreaWrapper">
+      <canvas id="myChart" height="300" width="1200"></canvas>
+    </div>
+    <canvas id="myChartAxis" height="300" width="0"></canvas>
+  </div>
+  <script>
+    const fetchData = async () => {
+      const JSON_FILE_NAME = '/data/euro_exchange_history_results.json';
+      const results = await fetch(JSON_FILE_NAME).then((r) => r.json());
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: results.labels,
+          datasets: [{
+            label: results.currency,
+            data: results.data,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          tooltips: {
+            callbacks: {
+              title: function (tooltipItem, data) {
+                return parseFloat(tooltipItem[0].yLabel).toFixed(4);
+              },
+              label: function (tooltipItem, data) {
+                return ''
+              },
+            },
+            backgroundColor: '#FFF',
+            titleFontSize: 16,
+            titleFontColor: '#0066ff',
+            bodyFontColor: '#000',
+            bodyFontSize: 14,
+            displayColors: false
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false,
+                stepSize: 0.1,
+                autoSkip: false
+              },
+            }],
+            xAxes: [{
+              ticks: {
+                autoSkip: false
+              },
+              position: 'top'
+            }, {
+              position: 'bottom'
+            }]
+          }
+        }
+      });
+    }
+    fetchData();
+  </script>
+</body>
+
+</html>
