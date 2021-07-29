@@ -46,7 +46,8 @@ const scrapeCursBnrRo = async () => {
   const JSON_FILE_NAME = './public/euro_exchange_history_results.json';
   try {
     const jsonData = JSON.parse(fs.readFileSync(JSON_FILE_NAME));
-    if (jsonData && jsonData.length) return;
+
+    if (jsonData && Object.keys(jsonData).length) return;
   }
   catch (err) {
     console.error(err);
